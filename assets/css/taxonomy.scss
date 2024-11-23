@@ -1,0 +1,75 @@
+/* Variabel warna brutalism */
+:root {
+  --brutal-bg: #ff6a33;
+  --brutal-bg-hover: yellow;
+  --brutal-border: #000;
+  --brutal-text: #000;
+}
+
+/* Gaya Brutalisme untuk halaman taxonomy */
+.taxonomy {
+  
+  color: var(--brutal-text);
+  padding: 10px;
+  text-align: center;
+  border: 3px solid var(--brutal-border);
+  margin: 0;
+}
+
+.taxonomy h1 {
+  font-size: 18px;
+  color: var(--brutal-text);
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--brutal-border);
+  padding-bottom: 10px;
+}
+
+.taxonomy ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  list-style: none;
+  padding: 8px;
+  margin: 0;
+  //justify-content: center;
+}
+
+/* Style untuk item dalam daftar taxonomy */
+#list-tax-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  font-size: 14px;
+  color: var(--brutal-text);
+  background-color: orange;
+  border: 2px solid var(--brutal-border);
+  text-transform: lowercase;
+  text-align: center;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 1px 1px 0 var(--brutal-border);
+  transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+}
+
+#list-tax-item:hover {
+  background-color: var(--brutal-bg-hover);
+  transform: translate(-2px, -2px);
+  box-shadow: 2px 2px 0 var(--brutal-border);
+}
+
+#list-tax-item:active {
+  transform: translate(0);
+  box-shadow: none;
+}
+
+.taxonomy a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.taxonomy a:visited {
+  color: inherit;
+}

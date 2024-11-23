@@ -1,0 +1,44 @@
+/* CSS untuk container hasil pencarian */
+#search-results {
+    display: none; /* Tersembunyi secara default */
+    //margin-top: 15px;
+    padding: 20px;
+    border: 2px solid black; /* Border tebal khas brutalism */
+    background-color: #fffb00;
+    color: black; /* Warna teks hitam */
+}
+
+/* Menampilkan hasil pencarian */
+#search-results.visible {
+    display: block;
+}
+
+/* CSS untuk setiap item hasil pencarian */
+#search-results div {
+    //margin-bottom: 15px;
+    padding: 5px;
+    text-align: left;
+}
+
+#search-results div a {
+    text-decoration: none;
+    color: black; /* Warna putih kontras */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#search-results div a:hover {
+    color: black; /* Warna hitam saat hover */
+    background-color: white; /* Warna putih sebagai latar */
+    padding: 2px; /* Efek padding tambahan */
+}
+
+/* CSS untuk pesan "No results found" */
+#search-results p {
+    background-color: black; /* Background hitam */
+    color: white; /* Teks putih */
+    font-size: 18px;
+    padding: 10px;
+    text-align: center;
+    border: 2px solid red; /* Border tebal merah */
+}

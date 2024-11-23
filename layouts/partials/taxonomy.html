@@ -1,0 +1,7 @@
+<div class="taxonomy">
+    <ul id="list-tax">
+      {{ range .Pages }}
+        <li id="list-tax-item"><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{ end }}
+    </ul>
+</div>

@@ -1,0 +1,64 @@
+{{ if eq .Kind "home" }}
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "name": "{{ .Site.Title }}",
+  "url": "{{ .Site.BaseURL }}",
+  "description": "{{ .Site.Params.description | htmlEscape }}",
+  "thumbnailUrl": "{{ .Site.Params.logo | absURL }}",
+  "license": "{{ .Site.Params.copyright | htmlEscape }}"
+}
+</script>
+
+{{ else if eq .Kind "page" }}
+{{ $author := or .Params.author "Admin" }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "{{ .Params.title | htmlEscape }}",
+  "description": "{{ .Description | htmlEscape }}",
+  "thumbnailUrl": "https://url.com/{{ .Params.file_code }}cover",
+  "duration": "{{ with .Params.length }}PT{{ div . 60 }}M{{ mod . 60 }}S{{ end }}",
+  "embedUrl": "https://url.com/{{ .Params.file_code }}",
+  "uploadDate": "{{ .Date.Format "2006-01-02T15:04:05Z" }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ $author | htmlEscape }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ .Site.Title | htmlEscape }}"
+  }
+}
+</script>
+
+{{ else if or (eq .Kind "taxonomy") (eq .Kind "taxonomyTerm") }}
+<!-- Jangan jalankan apa pun di halaman taksonomi -->
+
+{{ else }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {{ range $index, $video := .Pages }}
+    {
+      "@type": "ListItem",
+      "position": {{ add $index 1 }},
+      "item": {
+        "@type": "VideoObject",
+        "name": "{{ $video.Params.title | htmlEscape }}",
+        "description": "{{ $video.Description | htmlEscape }}",
+        "thumbnailUrl": "https://url.com/{{ $video.Params.file_code }}cover",
+        "duration": "{{ with $video.Params.length }}PT{{ div . 60 }}M{{ mod . 60 }}S{{ end }}",
+        "embedUrl": "https://url.com/{{ $video.Params.file_code }}",
+        "uploadDate": "{{ $video.Date.Format "2006-01-02T15:04:05Z" }}"
+      }
+    }{{ if ne (add $index 1) (len .Pages) }},{{ end }}
+    {{ end }}
+  ]
+}
+</script>
+{{ end }}

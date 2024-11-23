@@ -1,0 +1,50 @@
+/* Search Results Styling */
+#search-results {
+    display: none;
+    position: absolute;
+    top: 12rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 90%;
+    max-width: 800px;
+    background: #fff;
+    border: 2px solid #000;
+    padding: 20px;
+    box-shadow: 4px 4px 0px #000;
+}
+
+#search-results.visible {
+    display: block;
+}
+
+/* Styling for search result items */
+#search-results div {
+    padding: 4px 0;
+    border-bottom: 4px solid #ddd;
+}
+
+#search-results div:last-child {
+    border-bottom: none;
+}
+
+#search-results a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    font-size: 18px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+#search-results a:hover {
+    color: #ff0000;
+}
+
+/* No Results Message */
+#search-results p {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: #555;
+}

@@ -1,0 +1,85 @@
+//singel.html
+
+
+#container-detail{
+    padding: 10px 12px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+   // border-bottom: black 2px solid;
+    width: 100%;
+     box-shadow: 4px black solid;
+    .judul_video{
+      font-size: 10px;
+      margin-bottom: 8px;
+      width: 100%;
+      border-bottom: 2px solid black;
+      padding-bottom: 8px;
+    }
+  }
+  .Tentang{
+      margin-top: 8px;
+      width: 100%;
+      //border-bottom: 2px solid black;
+      padding-bottom: 8px;
+    
+  }
+  
+  #container-detail ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  
+  #container-detail ul li{
+    display: flex;
+    font-size: 14px;
+    #det{
+      font-weight: bold;
+      width: 20%;
+    }
+    #des{
+      width : 72%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-left: 0.5rem;
+      a{
+        padding: 0;
+        margin: 0;
+        text-decoration-line: underline;
+        text-decoration-color: purple;
+        text-decoration-thickness: 2px;
+      }
+    }
+  }
+  
+  .list{
+    text-align: center;
+    padding-top : 3rem;
+    padding-bottom: 3rem;
+  }
+.judul_video{
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 20px;
+  padding-bottom: 12px;
+  font-size: 18px;
+}
+
+.download_button{
+  text-align: center;
+  font-size: 16px;
+  padding: 6px;
+  background-color: orange;
+  margin: 1rem 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+  border: 2px solid black;
+  box-shadow: 2px 3px 0 black;
+  transition: transform 0.2s;
+  &:hover{
+    background-color: red;
+  }
+  
+}

@@ -1,0 +1,23 @@
+
+<div id="container-detail">
+  <ul class="list-detail">
+    <li>
+      <span id="det">Title</span>: 
+      <span id="des">{{ .Params.title }}</span>
+    </li>
+    <li>
+      <span id="det">Tanggal</span>
+     {{ $t := "15 Oct 2023" }}: 
+      <span id="des">{{ .Params.date.Format "2 Jan 2006" }}</span>
+    </li>
+    <li>
+      <span id="det">Durasi</span> : 
+      <span id="des">{{ $sec := .Params.length }}{{ printf "%02d:%02d" (mod (div $sec 60) 60) (mod $sec 60) }} </span>
+    </li>
+    <li>
+      <span id="det">Folder</span>: 
+      <span id="des"><a href="{{ .Site.BaseURL }}categories/{{ .Params.foldername | urlize }}">{{ .Params.foldername }}</a></span>
+    </li>
+  </ul>
+  <p>Ini adalah deskripsi</p>
+</div>

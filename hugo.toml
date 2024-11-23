@@ -1,0 +1,38 @@
+baseURL = 'https://example.org/'
+languageCode = "id-ID"
+title = 'BokepIndo'
+description = "jajdgdueinj"
+logo = ""
+[params]
+  cover_link = 'https://img.doodcdn.co/snaps/'
+  video_link = 'https://d000d.com/e/'
+  download_link = 'https://d000d.com/d/'
+  logo = 'logo'
+  description = "deskripsi"
+[outputs]
+  home = ["HTML", "JSON"]
+[module]
+  [module.hugoVersion]
+    extended = false
+    min = "0.116.0"
+    
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = false
+
+  [[related.indices]]
+    name = "title"
+    weight = 30
+
+  [[related.indices]]
+    name = "description"
+    weight = 30
+
+  [[related.indices]]
+    name = "tags"
+    weight = 30
+
+  [[related.indices]]
+    name = "date"
+    weight = 10

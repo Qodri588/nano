@@ -1,0 +1,35 @@
+<!-- Footer Section -->
+<footer>
+  <!-- Include footer JavaScript partial -->
+  <!-- Footer Content Container (Hapus jika tidak diperlukan) -->
+  <!-- <div> --> <!-- Hapus tanda komentar jika div ini diperlukan -->
+
+  <!-- Social Media Menu -->
+<div class="footer-container">
+  <div class="footer-menu">
+    <h4>Social</h4>
+    <ul>
+      <li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+      <li><a href="https://twitter.com" target="_blank">Twitter</a></li>
+      <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
+      <li><a href="https://www.linkedin.com" target="_blank">LinkedIn</a></li>
+      <li><a href="https://www.youtube.com" target="_blank">YouTube</a></li>
+    </ul>
+  </div>
+
+  <!-- Site Links Menu -->
+  <div class="footer-menu">
+    <h4>Site Links</h4>
+    <ul>
+      <li><a href="{{ "pages/about" | absURL }}">About Us</a></li>
+      <li><a href="{{ "pages/contact" | absURL }}">Contact</a></li>
+      <li><a href="{{ "pages/privacy" | absURL }}">Privacy</a></li>
+      <li><a href="{{ "pages/terms" | absURL }}">TOS</a></li>
+      <li><a href="{{ "pages/faq" | absURL }}">FAQ</a></li>
+    </ul>
+  </div>
+</div>
+  <div class="copyright">
+    &copy; {{ now.Year }} {{ .Site.Title }}. All rights reserved.
+  </div>
+</footer>

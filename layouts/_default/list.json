@@ -1,0 +1,10 @@
+{{- $pages := where .Site.RegularPages "Type" "!=" "page" -}}
+[
+{{- range $index, $page := $pages -}}
+  {{- if $index }},{{ end -}}
+  {
+    "title": {{ $page.Title | jsonify }},
+    "url": {{ $page.RelPermalink | jsonify }}
+  }
+{{- end -}}
+]

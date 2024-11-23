@@ -1,0 +1,12 @@
+  <div class="container-video-list">
+      {{ range .Pages }}
+      <div class="card-video-item">
+        <a href="{{ .RelPermalink }}">
+          <div class="thumbnail-video">
+            <img src="{{ .Site.Params.cover_link }}{{ .Params.cover }}" alt="{{ .Params.title }}">
+          </div>
+          <div class="title-video">{{ .LinkTitle }}</div>
+        </a>
+      </div>
+    {{ end }}
+  </div>

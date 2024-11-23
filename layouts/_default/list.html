@@ -1,0 +1,7 @@
+{{ define "main" }}
+    {{ if eq .Kind "term" }}
+        {{ partial "terms.html" . }}
+    {{ else if eq .Kind "taxonomy" }}
+        {{ partial "taxonomy.html" . }}
+    {{ end }}
+{{ end }}

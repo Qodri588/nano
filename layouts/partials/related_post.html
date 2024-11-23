@@ -1,0 +1,21 @@
+{{ $related := .Site.RegularPages.Related . | first 12 }}
+{{ $relatedCount := len $related }}
+{{ if lt $relatedCount 12 }}
+  {{ $additional := where .Site.RegularPages "Permalink" "not in" (slice $related.Permalink) | shuffle | first (sub 12 $relatedCount) }}
+  {{ $related = $related | append $additional }}
+{{ end }}
+
+<div class="container-video-list">
+  {{ range $related }}
+    <div class="card-video-item">
+      <a href="{{ .RelPermalink }}">
+        <div class="thumbnail-video">
+          <img
+            src="{{ .Site.Params.cover_link }}{{ .Params.cover }}"
+            alt="{{ .Params.title }}">
+        </div>
+        <div class="title-video">{{ .LinkTitle }}</div>
+      </a>
+    </div>
+  {{ end }}
+</div>
