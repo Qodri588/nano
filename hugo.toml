@@ -1,14 +1,14 @@
 baseURL = 'https://example.org/'
 languageCode = "id-ID"
 title = 'BokepIndo'
-description = "jajdgdueinj"
-logo = ""
+description = "tempat terbaik untuk Nonton dan Download Bokep Indonesia terbaru dan terlengkap! Kami menyediakan koleksi Bokep Indonesia dalam berbagai kategori, mulai dari Bokep ABG, Bokep Hijab, Bokep Onlyfans, Bokep Tiktok, Bokep Viral, Bokep Pelajar, hingga cerita seks terlengkap dan terbaru."
+logo = "logo.png"
 [params]
   cover_link = 'https://img.doodcdn.co/snaps/'
   video_link = 'https://d000d.com/e/'
   download_link = 'https://d000d.com/d/'
-  logo = 'logo'
-  description = "deskripsi"
+  logo = "logo.png"
+  description = "tempat terbaik untuk Nonton dan Download Bokep Indonesia terbaru dan terlengkap! Kami menyediakan koleksi Bokep Indonesia dalam berbagai kategori, mulai dari Bokep ABG, Bokep Hijab, Bokep Onlyfans, Bokep Tiktok, Bokep Viral, Bokep Pelajar, hingga cerita seks terlengkap dan terbaru."
 [outputs]
   home = ["HTML", "JSON"]
 [module]
@@ -36,3 +36,4 @@ logo = ""
   [[related.indices]]
     name = "date"
     weight = 10
+paginate = 12

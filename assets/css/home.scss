@@ -1,62 +1,72 @@
-/* CSS untuk desain brutalism responsive */
 .container-video-list {
     display: grid;
     gap: 10px;
     padding: 10px;
     background-color: #f7f7f7;
-  
-  }
-  
-  /* Tampilan mobile: 2 kolom */
-  @media (max-width: 768px) {
+    flex: 1;
+    max-width: 100%; /* Pastikan kontainer tidak melebihi lebar perangkat */
+    box-sizing: border-box; /* Hindari overflow karena padding */
+}
+
+/* Tampilan mobile: 2 kolom */
+@media (max-width: 768px) {
     .container-video-list {
-      grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
-  }
-  
-  /* Tampilan non-mobile: 6 kolom */
-  @media (min-width: 769px) {
+}
+
+/* Tampilan non-mobile: 6 kolom */
+@media (min-width: 769px) {
     .container-video-list {
-      grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(6, 1fr);
     }
-  }
-  
-  .card-video-item {
+}
+
+.card-video-item {
     background-color: #EEEEEE;
     border: 2px solid #000;
     box-shadow: 3px 3px 0 #000;
     transition: transform 0.1s;
-  }
-  
-  .card-video-item:hover {
+    overflow: hidden; /* Hindari konten keluar dari batas */
+}
+
+.card-video-item:hover {
     transform: translate(-2px, -2px);
-  }
-  
-  .card-video-item a {
+}
+
+.card-video-item a {
     text-decoration: none;
     color: #000;
-  }
-  
-  .thumbnail-video {
+}
+
+.thumbnail-video {
     position: relative;
     margin-bottom: 5px;
     background-color: #e3e3e3;
-  }
-  
-  .thumbnail-video img {
+}
+
+.thumbnail-video img {
     border-bottom: black 2px solid;
-    width: 100%;
-    height: 180*1.1px;
-    object-fit: cover;
-  }
-  
-  .title-video {
+    width: 100%; /* Pastikan gambar mengikuti ukuran kolom */
+    height: 175px; /* Pertahankan proporsi asli */
+   // max-height: 150px; /* Batasi tinggi maksimal agar gambar tidak terlalu besar */
+    object-fit: cover; /* Isi ruang tanpa distorsi */
+}
+
+.title-video {
     font-size: 0.8rem;
-    font-weight: bold;
+    //font-weight: bold;
     margin-bottom: 5px;
-    padding: 0.5rem;
-  }
-  main{
-    //padding: rem;
+    padding: 10px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //height: 1rem; /* atau sesuai kebutuhan */
+  text-align: center;
+}
+
+main {
     background-color: #f7f7f7;
-  }
+    max-width: 100%; /* Tambahkan batas untuk elemen utama */
+    overflow-x: hidden; /* Hilangkan scroll horizontal jika ada */
+}

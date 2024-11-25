@@ -1,6 +1,8 @@
 @import "reset";
+
 @import "header";
 @import "home";
+@import "pagination";
 @import "result";
 @import "detail";
 @import "tags";
@@ -14,5 +16,12 @@ body {
   font-family: "Roboto Mono", monospace;
   a{
     text-decoration: none;
+  }
+}
+
+.page-site{
+  padding: 1em;
+  h1, h2, h3, h4{
+    font-size: 21px;
   }
 }

@@ -4,4 +4,5 @@
     {{ else if eq .Kind "taxonomy" }}
         {{ partial "taxonomy.html" . }}
     {{ end }}
+    {{ template "_internal/pagination.html" . }}
 {{ end }}

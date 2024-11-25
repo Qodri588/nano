@@ -2,3 +2,4 @@
 
 //search result menu
 document.addEventListener("DOMContentLoaded",(()=>{const e=document.getElementById("search-input"),t=document.getElementById("search-btn"),n=document.getElementById("search-results"),s=e=>{n.innerHTML="",e.length>0?(n.classList.add("visible"),e.forEach((e=>{const t=document.createElement("div");t.innerHTML=`<a href="${e.url}">${e.title}</a>`,n.appendChild(t)}))):(n.innerHTML="<p>No results found.</p>",n.classList.add("visible"))},i=()=>{n.classList.remove("visible")},d=(e,t)=>(e=e.toLowerCase(),t.filter((t=>t.title.toLowerCase().includes(e))));fetch("/index.json").then((e=>e.json())).then((n=>{t.addEventListener("click",(()=>{const t=e.value.trim();if(t){const e=d(t,n);s(e)}else i()})),e.addEventListener("input",(()=>{const t=e.value.trim();if(t){const e=d(t,n);s(e)}else i()}))}))})),window.addEventListener("load",(()=>{quicklink.listen()}));
+

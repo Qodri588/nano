@@ -1,0 +1,82 @@
+
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Search...">
+    <button id="search-btn">Go</button>
+  </div>
+  <div id="search-results"></div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("search-input");
+  const searchButton = document.getElementById("search-btn");
+  const resultsContainer = document.getElementById("search-results");
+
+  const renderResults = (results) => {
+    resultsContainer.innerHTML = "";
+    if (results.length > 0) {
+      resultsContainer.classList.add("visible");
+      const container = document.createElement("div");
+      container.classList.add("container-video-list");
+
+      results.forEach((item) => {
+        const card = document.createElement("div");
+        card.classList.add("card-video-item");
+
+        card.innerHTML = `
+          <a href="${item.url}">
+            <div class="thumbnail-video">
+              <img 
+                src="https://img.doodcdn.co/snaps/${item.cover}" 
+                alt="${item.title}" 
+                loading="lazy">
+            </div>
+            <div class="title-video">${item.title}</div>
+          </a>
+        `;
+        container.appendChild(card);
+      });
+
+      resultsContainer.appendChild(container);
+    } else {
+      resultsContainer.innerHTML = "<p>No results found.</p>";
+      resultsContainer.classList.add("visible");
+    }
+  };
+
+  const hideResults = () => {
+    resultsContainer.classList.remove("visible");
+  };
+
+  const searchItems = (query, data) => {
+    query = query.toLowerCase();
+    return data.filter((item) => item.title.toLowerCase().includes(query));
+  };
+
+  fetch("/index.json")
+    .then((response) => response.json())
+    .then((data) => {
+      searchButton.addEventListener("click", () => {
+        const query = searchInput.value.trim();
+        if (query) {
+          const results = searchItems(query, data);
+          renderResults(results);
+        } else {
+          hideResults();
+        }
+      });
+
+      searchInput.addEventListener("input", () => {
+        const query = searchInput.value.trim();
+        if (query) {
+          const results = searchItems(query, data);
+          renderResults(results);
+        } else {
+          hideResults();
+        }
+      });
+    });
+});
+
+window.addEventListener("load", () => {
+  quicklink.listen();
+});
+</script>

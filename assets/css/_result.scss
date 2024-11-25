@@ -6,6 +6,7 @@
     border: 2px solid black; /* Border tebal khas brutalism */
     background-color: #fffb00;
     color: black; /* Warna teks hitam */
+overflow: hidden;
 }
 
 /* Menampilkan hasil pencarian */
@@ -18,12 +19,14 @@
     //margin-bottom: 15px;
     padding: 5px;
     text-align: left;
+    overflow: hidden;
+    border-bottom: black 2px solid;
 }
 
 #search-results div a {
     text-decoration: none;
     color: black; /* Warna putih kontras */
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
 }
 

@@ -1,4 +1,4 @@
-{{ if eq .Kind "home" }}
+{{ if or (eq .Kind "home") (eq .Type "page-site") }}
 <title itemprop="name">{{ .Site.Title | htmlEscape }}</title>
 <meta property="og:title" content="{{ .Site.Title | htmlEscape }}" />
 <meta name="twitter:title" content="{{ .Site.Title | htmlEscape }}" />

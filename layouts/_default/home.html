@@ -1,14 +1,23 @@
 {{ define "main" }}
   <div class="container-video-list">
-    {{ range .Paginator.Pages }}
+{{ range .Paginator.Pages }}
+  {{ if ne .Section "pages" }}
       <div class="card-video-item">
         <a href="{{ .RelPermalink }}">
           <div class="thumbnail-video">
-            <img src="{{ .Site.Params.cover_link }}{{ .Params.cover }}" alt="{{ .Params.title }}">
+            <img 
+            src="{{ .Site.Params.cover_link }}{{ .Params.cover }}" 
+            alt="{{ .Params.title }}"
+            loading="lazy">
           </div>
           <div class="title-video">{{ .LinkTitle }}</div>
         </a>
       </div>
     {{ end }}
+    {{ end }}
+    
   </div>
+  
+  
+  {{ template "_internal/pagination.html" . }}
 {{ end }}

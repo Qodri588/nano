@@ -4,7 +4,8 @@
   {{- if $index }},{{ end -}}
   {
     "title": {{ $page.Title | jsonify }},
-    "url": {{ $page.RelPermalink | jsonify }}
+    "url": {{ $page.RelPermalink | jsonify }},
+    "cover": {{ $page.Params.cover | jsonify }}
   }
 {{- end -}}
 ]

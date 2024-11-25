@@ -1,14 +1,27 @@
 {{ define "main" }}
-<iframe src="{{ .Site.Params.video_link }}{{ .Params.file_code }}" width="100%" height="320px" frameborder="0" allowfullscreen></iframe>
-<a href="google.com"><div class="download_button">
-  download
-</div></a>
-<h2 class="judul_video">{{ .Params.title }}</h2>
-<ul class="tag-list">
-    {{ range .Params.tags }}
-      <li class="tag"><a href="{{ "/tags/" | relURL }}{{ . | urlize }}">{{ . }}</a></li>
-    {{ end }}
-  </ul>
-{{ partial "detail.html" . }}
-{{ partial "related_post.html" . }}
+{{ if ne .Section "pages" }}
+    <iframe src="{{ .Site.Params.video_link }}{{ .Params.file_code }}" width="100%" height="320px" loading="lazy" frameborder="0" allowfullscreen ></iframe>
+    <a href="{{ .Site.Params.download_link }}{{ .Params.file_code }}">
+      <div class="download_button">
+        Download
+      </div>
+    </a>
+
+    <ul class="tag-list">
+      {{ $tags := .Params.tags | append "bokep indo" | append "indo" | append "telegram" | shuffle }}
+      {{ range $tags }}
+        <li class="tag">
+          <a href="{{ "/tags/" | relURL }}{{ . | urlize }}">{{ . }}</a>
+        </li>
+      {{ end }}
+    </ul>
+
+    {{ partial "detail.html" . }}
+    {{ partial "related_post.html" . }}
+
+  {{ else }}
+    <div class="page-site">
+      {{ .Content }}
+    </div>
+  {{ end }}
 {{ end }}
