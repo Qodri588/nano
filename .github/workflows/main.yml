@@ -1,0 +1,57 @@
+name: Hugo Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # GitHub Actions memerlukan Ubuntu sebagai host.
+    container:
+      image: alpine:latest
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Install dependencies (Hugo Extended dan lainnya)
+      - name: Install dependencies
+        run: |
+          apk add --no-cache hugo make gcc g++ libc6-compat musl-dev git unzip
+
+      # 3. Extract markdown.zip dan rename folder
+      - name: Extract and rename folder
+        run: |
+          unzip markdown.zip
+          if [ -d "markdown" ]; then
+            mv markdown content
+          else
+            echo "Folder 'markdown' tidak ditemukan setelah ekstraksi."
+            exit 1
+          fi
+
+      # 4. Build Hugo site
+      - name: Build Hugo Extended site
+        run: hugo --minify
+
+      # 5. Deploy output langsung ke branch dood
+      - name: Deploy to dood branch
+        run: |
+          # Konfigurasi Git
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+          # Cek apakah branch dood sudah ada
+          git fetch origin dood || true
+          git checkout dood || git checkout --orphan dood
+
+          # Salin output public ke root branch
+          rm -rf ./*  # Bersihkan branch dood
+          cp -r public/* .
+
+          # Commit dan push perubahan
+          git add .
+          git commit -m "Deploy Hugo Extended site"
+          git push --force origin dood
