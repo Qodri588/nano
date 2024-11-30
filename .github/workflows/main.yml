@@ -1,94 +1,46 @@
-name: Hugo Build and Deploy
+name: Upload Files to Branch 'dood'
 
 on:
   push:
     branches:
-      - master
+      - main  # Menjalankan workflow saat ada push ke branch 'main'
 
 jobs:
-  build-and-deploy:
+  upload_files:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # 2. Install dependencies (Hugo Extended dan lainnya)
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y hugo make gcc g++ git unzip
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
-      # 3. Extract markdown.zip dan rename folder
-      - name: Extract and rename folder
-        run: |
-          unzip markdown.zip
-          if [ -d "markdown" ]; then
-            mv markdown content
-          else
-            echo "Folder 'markdown' tidak ditemukan setelah ekstraksi."
-            exit 1
-          fi
+    - name: Install required libraries
+      run: |
+        python -m pip install --upgrade pip
+        pip install zipfile shutil
 
-      # 4. Pastikan file markdown ada
-      - name: Validate markdown files
-        run: |
-          if [ -z "$(find content -type f -name '*.md')" ]; then
-            echo "Tidak ada file markdown ditemukan di direktori 'content'."
-            exit 1
-          fi
+    - name: Run Python script to split zip into batches
+      run: |
+        python split_zip.py  # Menjalankan script untuk membagi file zip menjadi batch
 
-      # 5. Split content into smaller batches
-      - name: Split content into smaller batches
-        run: |
-          mkdir -p batches
-          count=0
-          find content -type f -name "*.md" | while read -r file; do
-            batch_dir="batches/batch_$(printf '%02d' $count)"
-            mkdir -p "$batch_dir"
-            mv "$file" "$batch_dir/"
-            if [ $(ls -1 "$batch_dir" | wc -l) -ge 3000 ]; then
-              count=$((count + 1))
-            fi
-          done
-          rm -rf content  # Hapus folder asli setelah dibagi
+    - name: Commit and push batch zip files to 'dood' branch
+      run: |
+        # Mengonfigurasi user git
+        git config --global user.name "Qodri588"
+        git config --global user.email "mqodri588@gmail.com"
+        
+        # Checkout branch dood dan pastikan branch tersebut ada
+        git fetch origin dood || git checkout --orphan dood
+        
+        # Tambahkan file batch zip ke staging area
+        git add output/*
 
-      # 6. Process each batch
-      - name: Process each batch
-        run: |
-          mkdir -p final_output
-          for batch_dir in batches/*; do
-            echo "Processing $batch_dir"
-            mkdir -p content
-            mv "$batch_dir"/* content/
+        # Commit file zip
+        git commit -m "Add batch zip files"
 
-            # Build Hugo site for current batch
-            hugo --minify
-
-            # Merge output into final_output
-            rsync -a public/ final_output/
-
-            # Cleanup
-            rm -rf content public
-          done
-
-      # 7. Deploy output ke branch dood
-      - name: Deploy to dood branch
-        run: |
-          # Konfigurasi Git
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-          # Cek apakah branch dood sudah ada
-          git fetch origin dood || true
-          git checkout dood || git checkout --orphan dood
-
-          # Salin output final ke root branch
-          rm -rf ./*  # Bersihkan branch dood
-          cp -r final_output/* .
-
-          # Commit dan push perubahan
-          git add .
-          git commit -m "Deploy Hugo Extended site"
-          git push --force origin dood
+        # Push perubahan ke branch 'dood'
+        git push origin dood

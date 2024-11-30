@@ -3,7 +3,10 @@
       <div class="card-video-item">
         <a href="{{ .RelPermalink }}">
           <div class="thumbnail-video">
-            <img src="{{ .Site.Params.cover_link }}{{ .Params.cover }}" alt="{{ .Params.title }}" loading="lazy">
+            <img src="{{ .Site.Params.cover_link }}{{ .Params.cover }}"
+            alt="{{ .Params.title }}"
+            onerror="this.onerror=null;this.src='logo.png';"
+            loading="lazy">
           </div>
           <div class="title-video">{{ .LinkTitle }}</div>
         </a>
