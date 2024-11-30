@@ -3,7 +3,7 @@ name: Upload Files to Branch 'dood'
 on:
   push:
     branches:
-      - main  # Menjalankan workflow saat ada push ke branch 'main'
+      - master  # Menjalankan workflow saat ada push ke branch 'main'
 
 jobs:
   upload_files:
