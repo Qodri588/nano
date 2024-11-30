@@ -7,9 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest  # GitHub Actions memerlukan Ubuntu sebagai host.
-    container:
-      image: alpine:latest
+    runs-on: ubuntu-latest
 
     steps:
       # 1. Checkout repository
@@ -19,7 +17,8 @@ jobs:
       # 2. Install dependencies (Hugo Extended dan lainnya)
       - name: Install dependencies
         run: |
-          apk add --no-cache hugo make gcc g++ libc6-compat musl-dev git unzip
+          sudo apt-get update
+          sudo apt-get install -y hugo make gcc g++ git unzip
 
       # 3. Extract markdown.zip dan rename folder
       - name: Extract and rename folder
@@ -32,11 +31,32 @@ jobs:
             exit 1
           fi
 
-      # 4. Build Hugo site
-      - name: Build Hugo Extended site
-        run: hugo --minify
+      # 4. Split content into smaller batches
+      - name: Split content into smaller batches
+        run: |
+          mkdir -p batches
+          find content -type f -name "*.md" | split -l 3000 -d - batches/batch_
+          rm -rf content  # Hapus folder asli setelah dibagi menjadi batch
 
-      # 5. Deploy output langsung ke branch dood
+      # 5. Process each batch
+      - name: Process each batch
+        run: |
+          mkdir -p final_output
+          for batch in batches/batch_*; do
+            mkdir -p content
+            mv $batch/* content/
+
+            # Build Hugo site for current batch
+            hugo --minify
+
+            # Merge output into final_output
+            rsync -a public/ final_output/
+
+            # Cleanup
+            rm -rf content public
+          done
+
+      # 6. Deploy output ke branch dood
       - name: Deploy to dood branch
         run: |
           # Konfigurasi Git
@@ -47,9 +67,9 @@ jobs:
           git fetch origin dood || true
           git checkout dood || git checkout --orphan dood
 
-          # Salin output public ke root branch
+          # Salin output final ke root branch
           rm -rf ./*  # Bersihkan branch dood
-          cp -r public/* .
+          cp -r final_output/* .
 
           # Commit dan push perubahan
           git add .
