@@ -35,16 +35,25 @@ jobs:
       - name: Split content into smaller batches
         run: |
           mkdir -p batches
-          find content -type f -name "*.md" | split -l 3000 -d - batches/batch_
-          rm -rf content  # Hapus folder asli setelah dibagi menjadi batch
+          count=0
+          for file in content/*.md; do
+            batch_dir="batches/batch_$(printf '%02d' $count)"
+            mkdir -p "$batch_dir"
+            mv "$file" "$batch_dir/"
+            if [ $(ls -1 "$batch_dir" | wc -l) -ge 3000 ]; then
+              count=$((count + 1))
+            fi
+          done
+          rm -rf content  # Hapus folder asli setelah dibagi
 
       # 5. Process each batch
       - name: Process each batch
         run: |
           mkdir -p final_output
-          for batch in batches/batch_*; do
+          for batch_dir in batches/*; do
+            echo "Processing $batch_dir"
             mkdir -p content
-            mv $batch/* content/
+            mv "$batch_dir"/* content/
 
             # Build Hugo site for current batch
             hugo --minify
