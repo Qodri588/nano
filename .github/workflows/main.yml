@@ -1,4 +1,4 @@
-name: Build Hugo Site with Splits
+name: Build Hugo Partial
 
 on:
   push:
@@ -14,42 +14,41 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Setup Hugo
-    - name: Setup Hugo
+    # Setup Hugo Extended
+    - name: Setup Hugo Extended
       uses: peaceiris/actions-hugo@v2
       with:
         hugo-version: "latest"
+        extended: true
 
     # Extract markdown.zip
     - name: Extract markdown.zip
       run: |
-        unzip -o markdown.zip -d markdown
+        unzip -o markdown.zip -d .
 
-    # Split Markdown into Batches of 1000 Folders
+    # Split Folders into Batches of 1000
     - name: Split folders into batches
       run: |
         mkdir -p split_batches
-        batch=1
+        batch_size=1000
+        batch_index=1
         count=0
         for folder in markdown/*; do
-          [ -d "$folder" ] || continue
-          target="split_batches/video_$batch"
-          mkdir -p "$target"
-          mv "$folder" "$target"
-          count=$((count + 1))
-          if [ "$count" -ge 1000 ]; then
-            count=0
-            batch=$((batch + 1))
+          if [ $((count % batch_size)) -eq 0 ]; then
+            mkdir -p split_batches/video_$batch_index
+            batch_index=$((batch_index + 1))
           fi
+          mv "$folder" split_batches/video_$((batch_index - 1))
+          count=$((count + 1))
         done
 
-    # Remove all content in 'content' folder
+    # Clean content folder
     - name: Clean content folder
       run: |
         rm -rf content/*
         mkdir -p content
 
-    # Move Split Batches into Content
+    # Move Batches into Content Folder
     - name: Move batches into content folder
       run: |
         mv split_batches/* content/
@@ -77,4 +76,4 @@ jobs:
         mv output.zip public.zip
         git add public.zip
         git commit -m "Add build output"
-        git push ori
+        git push origin dood --force
