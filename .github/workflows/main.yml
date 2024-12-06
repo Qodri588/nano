@@ -1,42 +1,80 @@
-name: Upload Files to Branch 'dood'
+name: Build Hugo Site
 
 on:
   push:
     branches:
-      - master  # Menjalankan workflow saat ada push ke branch 'main'
+      - main
 
 jobs:
-  upload_files:
+  build:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout repository
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
+    # Setup Hugo
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
       with:
-        python-version: '3.x'
+        hugo-version: "latest"
 
-    - name: Run Python script to split zip into batches
+    # Extract Markdown ZIP
+    - name: Extract markdown.zip
       run: |
-        python split_zip.py  # Menjalankan script untuk membagi file zip menjadi batch
+        unzip -o markdown.zip -d extracted
 
-    - name: Commit and push batch zip files to 'dood' branch
+    # Split Markdown Files into Batches
+    - name: Split Markdown files
       run: |
-        # Mengonfigurasi user git
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-        
-        # Memeriksa apakah branch 'dood' ada, jika tidak maka buat dan checkout
-        git fetch origin
-        git checkout dood || git checkout -b dood
-        
-        # Tambahkan file batch zip ke staging area
-        git add output/*
+        chmod +x ./split
+        ./split
 
-        # Commit file zip
-        git commit -m "Add batch zip files"
+    # Remove All Content in 'content' Folder
+    - name: Clean content folder
+      run: |
+        rm -rf content/*
+        mkdir -p content
 
-        # Push perubahan ke branch 'dood'
-        git push origin dood
+    # Move Batches into Content Folder and Rename
+    - name: Move batches into content and rename
+      run: |
+        for batch in markdown_batch_*; do
+          new_name=$(echo $batch | sed 's/markdown_batch_/video/')
+          mv "$batch" "content/$new_name"
+        done
+
+    # Build Hugo Site for Each Batch
+    - name: Build Hugo site for each batch
+      run: |
+        for dir in content/*; do
+          if [ -d "$dir" ]; then
+            hugo --contentDir "$dir" --destination "public/$(basename $dir)"
+          fi
+        done
+
+    # Zip Output
+    - name: Zip the output
+      run: |
+        zip -r output.zip public
+
+    # Push to 'dood' Branch
+    - name: Push output to dood branch
+      uses: actions/upload-artifact@v3
+      with:
+        name: public-output
+        path: output.zip
+
+    - name: Checkout dood branch
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git checkout -b dood || git checkout dood
+
+    - name: Upload zip to dood branch
+      run: |
+        mv output.zip public.zip
+        git add public.zip
+        git commit -m "Add build output"
+        git push origin dood --force
