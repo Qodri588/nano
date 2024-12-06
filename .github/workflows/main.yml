@@ -1,4 +1,4 @@
-name: Build Hugo Site
+name: Build Hugo Site with Splits
 
 on:
   push:
@@ -20,30 +20,39 @@ jobs:
       with:
         hugo-version: "latest"
 
-    # Extract Markdown ZIP
+    # Extract markdown.zip
     - name: Extract markdown.zip
       run: |
-        unzip -o markdown.zip -d extracted
+        unzip -o markdown.zip -d markdown
 
-    # Split Markdown Files into Batches
-    - name: Split Markdown files
+    # Split Markdown into Batches of 1000 Folders
+    - name: Split folders into batches
       run: |
-        chmod +x ./split
-        ./split
+        mkdir -p split_batches
+        batch=1
+        count=0
+        for folder in markdown/*; do
+          [ -d "$folder" ] || continue
+          target="split_batches/video_$batch"
+          mkdir -p "$target"
+          mv "$folder" "$target"
+          count=$((count + 1))
+          if [ "$count" -ge 1000 ]; then
+            count=0
+            batch=$((batch + 1))
+          fi
+        done
 
-    # Remove All Content in 'content' Folder
+    # Remove all content in 'content' folder
     - name: Clean content folder
       run: |
         rm -rf content/*
         mkdir -p content
 
-    # Move Batches into Content Folder and Rename
-    - name: Move batches into content and rename
+    # Move Split Batches into Content
+    - name: Move batches into content folder
       run: |
-        for batch in markdown_batch_*; do
-          new_name=$(echo $batch | sed 's/markdown_batch_/video/')
-          mv "$batch" "content/$new_name"
-        done
+        mv split_batches/* content/
 
     # Build Hugo Site for Each Batch
     - name: Build Hugo site for each batch
@@ -54,27 +63,18 @@ jobs:
           fi
         done
 
-    # Zip Output
+    # Zip the Output
     - name: Zip the output
       run: |
         zip -r output.zip public
 
-    # Push to 'dood' Branch
+    # Push Output to 'dood' Branch
     - name: Push output to dood branch
-      uses: actions/upload-artifact@v3
-      with:
-        name: public-output
-        path: output.zip
-
-    - name: Checkout dood branch
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git checkout -b dood || git checkout dood
-
-    - name: Upload zip to dood branch
-      run: |
         mv output.zip public.zip
         git add public.zip
         git commit -m "Add build output"
-        git push origin dood --force
+        git push ori
