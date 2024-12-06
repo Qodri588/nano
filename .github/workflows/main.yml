@@ -1,4 +1,4 @@
-name: Build Hugo Partial
+name: Build Hugo Partial (2000 Folders)
 
 on:
   push:
@@ -10,51 +10,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout repository
+    # 1. Checkout repository
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Setup Hugo Extended
+    # 2. Setup Hugo Extended
     - name: Setup Hugo Extended
       uses: peaceiris/actions-hugo@v2
       with:
         hugo-version: "latest"
         extended: true
 
-    # Extract markdown.zip
+    # 3. Extract markdown.zip
     - name: Extract markdown.zip
       run: |
         unzip -o markdown.zip -d .
 
-    # Split Folders into Batches of 1000
-    - name: Split folders into batches
+    # 4. Select 2000 Folders
+    - name: Select 2000 folders
       run: |
-        mkdir -p split_batches
-        batch_size=1000
-        batch_index=1
+        mkdir -p selected_folders
         count=0
         for folder in markdown/*; do
-          if [ $((count % batch_size)) -eq 0 ]; then
-            mkdir -p split_batches/video_$batch_index
-            batch_index=$((batch_index + 1))
+          if [ $count -lt 2000 ]; then
+            mv "$folder" selected_folders/
+            count=$((count + 1))
+          else
+            break
           fi
-          mv "$folder" split_batches/video_$((batch_index - 1))
-          count=$((count + 1))
         done
 
-    # Clean content folder
+    # 5. Clean content folder
     - name: Clean content folder
       run: |
         rm -rf content/*
         mkdir -p content
 
-    # Move Batches into Content Folder
-    - name: Move batches into content folder
+    # 6. Move Selected Folders to Content
+    - name: Move selected folders to content
       run: |
-        mv split_batches/* content/
+        mv selected_folders/* content/
 
-    # Build Hugo Site for Each Batch
-    - name: Build Hugo site for each batch
+    # 7. Build Hugo Site for Selected Folders
+    - name: Build Hugo site
       run: |
         for dir in content/*; do
           if [ -d "$dir" ]; then
@@ -62,12 +60,12 @@ jobs:
           fi
         done
 
-    # Zip the Output
+    # 8. Zip the Output
     - name: Zip the output
       run: |
         zip -r output.zip public
 
-    # Push Output to 'dood' Branch
+    # 9. Push Output to 'dood' Branch
     - name: Push output to dood branch
       run: |
         git config user.name "GitHub Actions"
@@ -75,5 +73,5 @@ jobs:
         git checkout -b dood || git checkout dood
         mv output.zip public.zip
         git add public.zip
-        git commit -m "Add build output"
+        git commit -m "Add build output for 2000 folders"
         git push origin dood --force
